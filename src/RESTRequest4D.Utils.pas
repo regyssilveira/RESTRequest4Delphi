@@ -9,8 +9,14 @@ interface
 uses
   {$IFDEF FPC}
     Classes, SysUtils,
+    {$IFDEF MSWINDOWS}
+    ActiveX,
+    {$ENDIF}
   {$ELSE}
-    System.Classes, System.SysUtils, Winapi.ActiveX,
+    System.Classes, System.SysUtils,
+    {$IFDEF MSWINDOWS}
+    Winapi.ActiveX,
+    {$ENDIF}
   {$ENDIF}
   RESTRequest4D.Request.Contract,
   RESTRequest4D.Response.Contract;
@@ -108,7 +114,7 @@ end;
 procedure TAsyncRequestThread.Execute;
 begin
   LastError := '';
-  {$IFNDEF FPC}
+  {$IFDEF MSWINDOWS}
   CoInitialize(nil);
   {$ENDIF}
   try
@@ -131,7 +137,7 @@ begin
       end;
     end;
   finally
-    {$IFNDEF FPC}
+    {$IFDEF MSWINDOWS}
     CoUninitialize;
     {$ENDIF}
   end;
